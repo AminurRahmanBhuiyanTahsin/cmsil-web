@@ -1,0 +1,318 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model admission_applications {
+  id              Int                            @id @default(autoincrement())
+  studentName     String                         @db.VarChar(255)
+  email           String                         @db.VarChar(255)
+  gpa             Decimal                        @db.Decimal(4, 2)
+  department      String                         @db.VarChar(100)
+  status          admission_applications_status? @default(pending)
+  applicationDate DateTime                       @default(now()) @db.Timestamp(0)
+}
+
+model attendancelog {
+  id              Int                  @id @default(autoincrement())
+  date            DateTime             @db.Date
+  status          attendancelog_status
+  studentId       Int
+  courseId        Int
+  enrolledstudent enrolledstudent      @relation(fields: [studentId], references: [id], onDelete: Cascade, map: "attendancelog_ibfk_1")
+  course          course               @relation(fields: [courseId], references: [id], map: "attendancelog_ibfk_2")
+
+  @@unique([studentId, courseId, date], map: "attendance_safeguard")
+  @@index([courseId], map: "courseId")
+}
+
+model batch {
+  id              Int               @id @default(autoincrement())
+  batchNumber     Int               @unique(map: "batchNumber")
+  session         String            @unique(map: "session")
+  startYearShort  Int
+  endYearShort    Int
+  enrolledstudent enrolledstudent[]
+}
+
+model book {
+  id            Int             @id @default(autoincrement())
+  isbn          String          @unique(map: "isbn")
+  title         String
+  author        String
+  stockQuantity Int
+  location      String
+  status        book_status?    @default(AVAILABLE)
+  libraryborrow libraryborrow[]
+}
+
+model course {
+  id            Int               @id @default(autoincrement())
+  courseCode    String            @unique(map: "courseCode")
+  courseName    String
+  department    course_department
+  semester      Int
+  facultyId     Int
+  attendancelog attendancelog[]
+  faculty       faculty           @relation(fields: [facultyId], references: [id], map: "course_ibfk_1")
+
+  @@index([facultyId], map: "facultyId")
+}
+
+model enrolledstudent {
+  id                Int                        @id @default(autoincrement())
+  institutionalRoll String                     @unique(map: "idx_enrolledstudent_roll")
+  classRoll         Int
+  name              String
+  email             String                     @unique(map: "email")
+  imageUrl          String                     @db.VarChar(255)
+  phone             String
+  department        enrolledstudent_department
+  currentSemester   Int?                       @default(1)
+  cgpa              Float?                     @default(0)
+  bloodGroup        String
+  presentAddress    String
+  permanentAddress  String
+  batchId           Int
+  createdAt         DateTime?                  @default(now()) @db.DateTime(0)
+  passwordHash      String                     @default("") @db.VarChar(255)
+  attendancelog     attendancelog[]
+  batch             batch                      @relation(fields: [batchId], references: [id], map: "enrolledstudent_ibfk_1")
+  libraryborrow     libraryborrow[]
+  project           project[]
+  studentfee        studentfee[]
+  studentskill      studentskill[]
+
+  @@unique([department, batchId, classRoll], map: "student_roll_safeguard")
+  @@index([batchId], map: "batchId")
+}
+
+model faculty {
+  id               Int                @id @default(autoincrement())
+  facultyId        String             @unique(map: "Faculty_facultyId_key")
+  name             String
+  designation      String
+  department       faculty_department
+  email            String             @unique(map: "email")
+  imageUrl         String
+  highestDegree    String
+  almaMater        String
+  roomNumber       String
+  researchInterest String?
+  passwordHash     String?            @db.VarChar(255)
+  course           course[]
+}
+
+model libraryborrow {
+  id                Int             @id @default(autoincrement())
+  borrowDate        DateTime        @default(now()) @db.DateTime(0)
+  dueDate           DateTime        @db.DateTime(0)
+  returnDate        DateTime?       @db.DateTime(0)
+  isOverdue         Boolean         @default(false)
+  studentId         Int
+  institutionalRoll String?
+  bookId            Int
+  createdAt         DateTime        @default(now()) @db.DateTime(0)
+  enrolledstudent   enrolledstudent @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "libraryborrow_ibfk_1")
+  book              book            @relation(fields: [bookId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "libraryborrow_ibfk_2")
+
+  @@index([bookId], map: "bookId")
+  @@index([studentId], map: "studentId")
+}
+
+model notice {
+  id        Int          @id @default(autoincrement())
+  title     String       @db.VarChar(255)
+  content   String       @db.Text
+  category  String       @default("ACADEMIC") @db.VarChar(50)
+  scope     notice_scope @default(PUBLIC)
+  postedBy  String       @default("Administration Desk") @db.VarChar(100)
+  createdAt DateTime     @default(now()) @db.DateTime(0)
+  updatedAt DateTime     @default(now()) @db.DateTime(0)
+}
+
+model project {
+  id              Int             @id @default(autoincrement())
+  title           String
+  description     String          @db.Text
+  techStack       String
+  liveUrl         String?
+  githubUrl       String?
+  studentId       Int
+  enrolledstudent enrolledstudent @relation(fields: [studentId], references: [id], onDelete: Cascade, map: "project_ibfk_1")
+
+  @@index([studentId], map: "studentId")
+}
+
+model staff {
+  id           Int          @id @default(autoincrement())
+  staffId      String       @unique(map: "staffId")
+  name         String
+  email        String       @unique(map: "email")
+  imageUrl     String       @db.VarChar(255)
+  phone        String
+  role         staff_role
+  designation  String
+  salary       Decimal      @db.Decimal(10, 2)
+  joiningDate  DateTime     @default(now()) @db.DateTime(0)
+  status       staff_status @default(ACTIVE)
+  createdAt    DateTime     @default(now()) @db.DateTime(0)
+  passwordHash String?      @db.VarChar(255)
+  tickets      tickets[]
+}
+
+model student {
+  id             Int       @id @default(autoincrement())
+  name           String
+  email          String    @unique(map: "email")
+  sscGpa         Float
+  hscGpa         Float
+  physicsMarks   Int
+  chemistryMarks Int
+  mathMarks      Int
+  isEligible     Boolean?  @default(false)
+  createdAt      DateTime? @default(now()) @db.DateTime(0)
+}
+
+model studentfee {
+  id              Int                @id @default(autoincrement())
+  invoiceNumber   String             @unique(map: "invoiceNumber")
+  amountDue       Decimal            @db.Decimal(10, 2)
+  amountPaid      Decimal            @default(0.00) @db.Decimal(10, 2)
+  feeType         studentfee_feeType
+  semester        Int
+  dueDate         DateTime           @db.DateTime(0)
+  paymentDate     DateTime?          @db.DateTime(0)
+  status          studentfee_status  @default(UNPAID)
+  studentId       Int
+  createdAt       DateTime           @default(now()) @db.DateTime(0)
+  enrolledstudent enrolledstudent    @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "studentfee_ibfk_1")
+
+  @@index([studentId], map: "studentId")
+}
+
+model studentskill {
+  id              Int             @id @default(autoincrement())
+  skillName       String
+  studentId       Int
+  enrolledstudent enrolledstudent @relation(fields: [studentId], references: [id], onDelete: Cascade, map: "studentskill_ibfk_1")
+
+  @@unique([studentId, skillName], map: "skill_safeguard")
+}
+
+model tickets {
+  id              Int                  @id @default(autoincrement())
+  ticketNumber    String               @unique(map: "ticketNumber") @db.VarChar(50)
+  title           String               @db.VarChar(255)
+  description     String               @db.Text
+  priority        tickets_priority?    @default(MEDIUM)
+  status          tickets_status?      @default(OPEN)
+  reporterType    tickets_reporterType
+  reporterId      Int
+  reporterEmail   String
+  assignedStaffId Int?
+  resolutionNotes String?              @db.Text
+  resolvedAt      DateTime?            @db.DateTime(0)
+  createdAt       DateTime?            @default(now()) @db.DateTime(0)
+  updatedAt       DateTime?            @default(now()) @db.DateTime(0)
+  staff           staff?               @relation(fields: [assignedStaffId], references: [id], onUpdate: Restrict, map: "tickets_ibfk_1")
+
+  @@index([assignedStaffId], map: "assignedStaffId")
+}
+
+enum attendancelog_status {
+  PRESENT
+  ABSENT
+  LATE
+}
+
+enum course_department {
+  CSE
+  EEE
+  CE
+  ME
+}
+
+enum faculty_department {
+  CSE
+  EEE
+  CE
+  ME
+}
+
+enum notice_scope {
+  PUBLIC
+  PRIVATE
+}
+
+enum studentfee_feeType {
+  ADMISSION
+  SEMESTER_TUITION
+  LAB_DEPOSIT
+  EXAM_REGISTRATION
+  LIBRARY_FINE
+}
+
+enum tickets_priority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum admission_applications_status {
+  pending
+  approved
+  rejected
+}
+
+enum tickets_status {
+  OPEN
+  IN_PROGRESS
+  ON_HOLD
+  RESOLVED
+  CLOSED
+}
+
+enum book_status {
+  AVAILABLE
+  BORROWED
+}
+
+enum staff_role {
+  ADMINISTRATION
+  ACCOUNTS
+  LIBRARY
+  IT_SUPPORT
+  LOGISTICS
+}
+
+enum tickets_reporterType {
+  STUDENT
+  FACULTY
+  STAFF
+  GUEST
+}
+
+enum enrolledstudent_department {
+  CSE
+  EEE
+  CE
+  ME
+}
+
+enum studentfee_status {
+  PAID
+  PARTIAL
+  UNPAID
+  OVERDUE
+}
+
+enum staff_status {
+  ACTIVE
+  SUSPENDED
+  RESIGNED
+}

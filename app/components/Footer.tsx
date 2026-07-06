@@ -44,11 +44,18 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Column 4: Location Map Placeholder */}
+        {/* Column 4: Location Map (Completely Vivid & Standard Colors) */}
         <div>
           <h4 className="font-bold text-blue-400 mb-6 uppercase text-xs tracking-widest">Location Map</h4>
-          <div className="w-full h-32 bg-white/5 rounded-lg border border-white/10 flex items-center justify-center overflow-hidden">
-            <span className="text-[10px] text-gray-500 italic text-center px-4 uppercase">Google Maps API Integration Pending</span>
+          <div className="w-full h-36 rounded-lg border border-white/10 overflow-hidden bg-slate-950 relative">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3651.9024424313657!2d90.4103131!3d23.7508754!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755b858aa58cfbd%3A0xda43981504cf01a4!2sDhaka!5e0!3m2!1sen!2sbd!4v1719999999999!5m2!1sen!2sbd"
+              className="w-full h-full border-0 opacity-100"
+              allowFullScreen={false}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="CMSIL Campus Location Map"
+            />
           </div>
         </div>
 
