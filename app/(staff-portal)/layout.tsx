@@ -13,9 +13,10 @@ export default async function StaffPortalLayout({ children }: { children: React.
     { label: "Admissions", href: "/staff/admissions", roles: ["ADMINISTRATION", "IT_SUPPORT"] },
     { label: "Finance", href: "/staff/finance", roles: ["ADMINISTRATION", "ACCOUNTS", "IT_SUPPORT"] },
     { label: "Helpdesk", href: "/staff/it-desk", roles: ["ADMINISTRATION", "IT_SUPPORT"] },
-    { label: "Inventory", href: "/staff/library", roles: ["ADMINISTRATION", "LIBRARY", "LOGISTICS", "IT_SUPPORT"] },
+    { label: "Inventory", href: "/staff/inventory", roles: ["ADMINISTRATION", "LIBRARY", "LOGISTICS", "IT_SUPPORT"] },
     { label: "Profile", href: "/staff/profile", roles: ["ADMINISTRATION", "ACCOUNTS", "LIBRARY", "IT_SUPPORT", "LOGISTICS"] },
     { label: "System Control", href: "/staff/settings", roles: ["IT_SUPPORT"] },
+    { label: "Library", href: "/staff/library", roles: ["ADMINISTRATION", "LIBRARY", "LOGISTICS", "IT_SUPPORT"] },
   ];
 
   // Filter items based on the logged-in role
