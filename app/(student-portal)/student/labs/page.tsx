@@ -11,8 +11,7 @@ export default function StudentLabsPage() {
 
   useEffect(() => {
     async function fetchLabs() {
-      // Hardcoded ID 401 (Ahsan Habib) for testing
-      const res = await getStudentLabs(401); 
+      const res = await getStudentLabs(); 
       
       if (res.success && res.data) {
         setLabs(res.data);
@@ -64,7 +63,7 @@ export default function StudentLabsPage() {
                 </div>
 
                 {/* Lab Details */}
-                <div className="flex-grow space-y-4">
+                <div className="grow space-y-4">
                   <div>
                     <div className="flex items-center gap-2 mb-1.5">
                       <span className="text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-sm bg-cyan-100 text-cyan-700">

@@ -18,12 +18,9 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     
-    // ADD THIS SECTION:
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./*"]
     },
-    // END OF SECTION
 
     "plugins": [
       {

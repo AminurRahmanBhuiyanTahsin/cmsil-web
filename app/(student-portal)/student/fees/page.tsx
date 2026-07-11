@@ -10,8 +10,7 @@ export default function StudentFeesPage() {
 
   useEffect(() => {
     async function fetchFees() {
-      // Hardcoded ID 401 for Ahsan Habib
-      const res = await getStudentFees(401); 
+      const res = await getStudentFees(); 
       if (res.success && res.data) {
         setFees(res.data);
       }
@@ -91,7 +90,7 @@ export default function StudentFeesPage() {
                 <div key={i} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6 hover:shadow-md transition-shadow group">
                   
                   {/* Left: Invoice Info */}
-                  <div className="flex-grow">
+                  <div className="grow">
                     <div className="flex items-center gap-3 mb-2">
                       <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-sm border ${statusStyle} flex items-center gap-1`}>
                         <StatusIcon size={12} /> {fee.status}

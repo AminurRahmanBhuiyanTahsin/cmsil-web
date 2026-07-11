@@ -60,7 +60,7 @@ export default function TeacherDashboard() {
                 {link.icon}
               </div>
               <h3 className="text-lg font-bold text-slate-800 mb-1">{link.title}</h3>
-              <p className="text-slate-500 text-sm flex-grow">{link.desc}</p>
+              <p className="text-slate-500 text-sm grow">{link.desc}</p>
             </div>
           </Link>
         ))}
@@ -80,7 +80,7 @@ export default function TeacherDashboard() {
               </p>
               <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Start Time</p>
             </div>
-            <div className="flex-grow">
+            <div className="grow">
               <div className="flex items-center space-x-2">
                  <h4 className="font-black text-slate-800 text-lg">{nextClass.title}</h4>
                  <span className="text-xs font-bold bg-slate-200 px-2 py-1 rounded">{nextClass.course_code}</span>

@@ -11,8 +11,7 @@ export default function StudentResultsPage() {
 
   useEffect(() => {
     async function fetchResults() {
-      // Hardcoded ID 241 based on your database screenshot for testing!
-      const res = await getStudentResults(241); 
+      const res = await getStudentResults();
       
       if (res.success && res.grades) {
         setGrades(res.grades);
@@ -57,7 +56,7 @@ export default function StudentResultsPage() {
         </div>
         
         {/* OVERALL CGPA BADGE */}
-        <div className="relative z-10 bg-slate-800/80 p-6 rounded-2xl border border-slate-700 text-center min-w-[160px]">
+        <div className="relative z-10 bg-slate-800/80 p-6 rounded-2xl border border-slate-700 text-center min-w-40">
           <p className="text-slate-400 text-xs font-black uppercase tracking-widest mb-1">Overall CGPA</p>
           <p className="text-4xl font-black text-emerald-400">
             {Number(studentInfo.cgpa).toFixed(2)}

@@ -1,10 +1,21 @@
 "use server";
 
 import { db } from "@/lib/db"; 
+import { cookies } from "next/headers"; // Added cookie import!
 
-export async function getStudentRoutine(studentId: number) {
+export async function getStudentRoutine() { // Removed the studentId parameter
   try {
-    // 1. Get the student's department and semester
+    // 1. Get the dynamic student ID from the cookie
+    const cookieStore = await cookies();
+    const studentIdString = cookieStore.get("studentId")?.value;
+    
+    if (!studentIdString) {
+      return { success: false, message: "Unauthorized: No session found." };
+    }
+    
+    const studentId = parseInt(studentIdString, 10);
+
+    // 2. Get the student's department and semester
     const [studentRows]: any = await db.execute(
       `SELECT department, currentSemester FROM enrolledstudent WHERE id = ?`,
       [studentId]
@@ -16,7 +27,7 @@ export async function getStudentRoutine(studentId: number) {
 
     const { department, currentSemester } = studentRows[0];
 
-    // 2. Fetch routine WITH the JOINs using your exact column names
+    // 3. Fetch routine WITH the JOINs using your exact column names
     const [routineRows]: any = await db.execute(
       `SELECT 
         cr.day_of_week, 

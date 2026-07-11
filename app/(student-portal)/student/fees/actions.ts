@@ -1,9 +1,20 @@
 "use server";
 
 import { db } from "@/lib/db"; 
+import { cookies } from "next/headers"; // Added cookie import!
 
-export async function getStudentFees(studentId: number) {
+export async function getStudentFees() { // Removed the studentId parameter
   try {
+    // 1. Get the dynamic student ID from the cookie
+    const cookieStore = await cookies();
+    const studentIdString = cookieStore.get("studentId")?.value;
+    
+    if (!studentIdString) {
+      return { success: false, message: "Unauthorized: No session found." };
+    }
+    
+    const studentId = parseInt(studentIdString, 10);
+
     const [feeRows]: any = await db.execute(
       `SELECT 
         id, 

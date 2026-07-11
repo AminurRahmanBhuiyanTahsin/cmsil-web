@@ -11,8 +11,7 @@ export default function StudentRoutinePage() {
 
   useEffect(() => {
     async function fetchRoutine() {
-      // Hardcoded ID 401 for Ahsan Habib (CSE, Sem 1) for testing
-      const res = await getStudentRoutine(401); 
+      const res = await getStudentRoutine(); 
       
       if (res.success && res.data) {
         setRoutine(res.data);
@@ -75,7 +74,7 @@ export default function StudentRoutinePage() {
                     </div>
 
                     {/* Class Details */}
-                    <div className="flex-grow space-y-3">
+                    <div className="grow space-y-3">
                       <div>
                         <div className="flex items-center gap-3 mb-1">
                           <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-sm ${

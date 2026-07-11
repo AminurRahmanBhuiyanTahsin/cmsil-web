@@ -1,10 +1,21 @@
 "use server";
 
 import { db } from "@/lib/db"; 
+import { cookies } from "next/headers"; // Added cookie import!
 
-export async function getStudentResults(studentId: number) {
+export async function getStudentResults() { // Removed studentId parameter
   try {
-    // 1. Get basic student info (Name, Roll, Dept)
+    // 1. Get the dynamic student ID from the cookie
+    const cookieStore = await cookies();
+    const studentIdString = cookieStore.get("studentId")?.value;
+    
+    if (!studentIdString) {
+      return { success: false, message: "Unauthorized: No session found." };
+    }
+    
+    const studentId = parseInt(studentIdString, 10);
+
+    // 2. Get basic student info (Name, Roll, Dept)
     const [studentRows]: any = await db.execute(
       `SELECT name, institutionalRoll, department, cgpa FROM enrolledstudent WHERE id = ?`,
       [studentId]
@@ -14,7 +25,7 @@ export async function getStudentResults(studentId: number) {
       return { success: false, message: "Student not found" };
     }
 
-    // 2. Fetch all grades and join with the courses table for names and credits
+    // 3. Fetch all grades and join with the courses table for names and credits
     const [gradeRows]: any = await db.execute(
       `SELECT 
         g.semester,

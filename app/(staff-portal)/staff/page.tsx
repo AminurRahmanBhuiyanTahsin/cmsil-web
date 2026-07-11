@@ -6,7 +6,8 @@ import {
   Wallet, 
   Wrench, 
   BookOpen, 
-  Settings 
+  Settings,
+  LifeBuoy // <-- Add this import
 } from "lucide-react";
 
 export default async function StaffDashboard() {
@@ -15,7 +16,7 @@ export default async function StaffDashboard() {
   const staffName = cookieStore.get("staffName")?.value || "Administrator";
 
   // 1. Define all available modules and who can see them with premium Lucide icons
-  const allModules = [
+const allModules = [
     { 
       title: "Manage Admissions", 
       href: "/staff/admissions", 
@@ -31,19 +32,31 @@ export default async function StaffDashboard() {
       roles: ["ADMINISTRATION", "ACCOUNTS", "IT_SUPPORT"] 
     },
     { 
-      title: "IT Helpdesk", 
-      href: "/staff/it-desk", 
-      icon: <Wrench size={32} className="text-amber-600" />, 
-      desc: "Resolve support tickets", 
-      roles: ["ADMINISTRATION", "IT_SUPPORT"] 
-    },
-    { 
       title: "Library Assets", 
       href: "/staff/library", 
       icon: <BookOpen size={32} className="text-purple-600" />, 
       desc: "Book & journal inventory", 
       roles: ["ADMINISTRATION", "LIBRARY", "LOGISTICS", "IT_SUPPORT"] 
     },
+    
+    // NEW: The ticket submission card for everyone
+    { 
+      title: "Report IT Issue", 
+      href: "/staff/helpdesk", 
+      icon: <LifeBuoy size={32} className="text-rose-600" />, 
+      desc: "Submit a support ticket to IT", 
+      roles: ["ADMINISTRATION", "ACCOUNTS", "LIBRARY", "LOGISTICS", "IT_SUPPORT"] 
+    },
+
+    // RENAMED: The ticket resolution card for IT
+    { 
+      title: "Manage Tickets", 
+      href: "/staff/it-desk", 
+      icon: <Wrench size={32} className="text-amber-600" />, 
+      desc: "Resolve support tickets", 
+      roles: ["ADMINISTRATION", "IT_SUPPORT"] 
+    },
+
     { 
       title: "System Control", 
       href: "/staff/settings", 
@@ -83,7 +96,7 @@ export default async function StaffDashboard() {
                 </div>
                 
                 <h3 className="font-bold text-slate-800 mb-1 text-lg">{card.title}</h3>
-                <p className="text-slate-500 text-sm flex-grow">{card.desc}</p>
+                <p className="text-slate-500 text-sm grow">{card.desc}</p>
               </div>
             </Link>
           ))}

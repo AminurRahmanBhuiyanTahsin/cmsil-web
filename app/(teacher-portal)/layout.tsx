@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import LogoutButton from "../components/LogoutButton"; // Fixed path (only 1 set of dots needed)
+import LogoutButton from "../components/LogoutButton";
 import {
   LayoutDashboard,
   BookOpen,
@@ -12,6 +12,7 @@ import {
   Megaphone,
   User,
   Calendar,
+  LifeBuoy // <-- 1. Imported the LifeBuoy icon here
 } from "lucide-react";
 
 export default function TeacherPortalLayout({ children }: { children: React.ReactNode }) {
@@ -25,6 +26,7 @@ export default function TeacherPortalLayout({ children }: { children: React.Reac
     { title: "Grading", href: "/teacher/grading", icon: <PenTool size={20} /> },
     { title: "Routine", href: "/teacher/routine", icon: <Calendar size={20} /> },
     { title: "Notices", href: "/teacher/notices", icon: <Megaphone size={20} /> },
+    { title: "Helpdesk", href: "/teacher/helpdesk", icon: <LifeBuoy size={20} /> }, // <-- 2. Added the menu item here
     { title: "Profile", href: "/teacher/profile", icon: <User size={20} /> },
   ];
 
@@ -59,7 +61,7 @@ export default function TeacherPortalLayout({ children }: { children: React.Reac
       </aside>
 
       {/* 2. MAIN APPLICATION CONTENT WINDOW */}
-      <div className="flex-grow flex flex-col">
+      <div className="grow flex flex-col">
         {/* TOP HEADER STATUS BAR */}
         <header className="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-8 shrink-0">
           <h2 className="text-xl font-black text-slate-800 tracking-tight">Faculty Portal</h2>
@@ -69,7 +71,7 @@ export default function TeacherPortalLayout({ children }: { children: React.Reac
         </header>
 
         {/* COMPONENT SUB-PAGES RENDER INSIDE HERE */}
-        <main className="flex-grow overflow-y-auto">
+        <main className="grow overflow-y-auto">
           {children}
         </main>
       </div>

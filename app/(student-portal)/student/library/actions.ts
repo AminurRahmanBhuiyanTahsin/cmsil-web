@@ -1,11 +1,21 @@
 "use server";
 
 import { db } from "@/lib/db"; 
+import { cookies } from "next/headers"; // Add this import!
 
-export async function getLibraryData(studentId: number) {
+export async function getLibraryData() {
   try {
-    // 1. Fetch active borrowed books for this specific student
-    // We only fetch where returnDate is NULL (meaning they haven't returned it yet)
+    // 1. Get the dynamic student ID from the cookie
+    const cookieStore = await cookies();
+    const studentIdString = cookieStore.get("studentId")?.value;
+    
+    if (!studentIdString) {
+      return { success: false, message: "Unauthorized: No session found." };
+    }
+    
+    const studentId = parseInt(studentIdString, 10);
+
+    // 2. Fetch active borrowed books for this specific student
     const [borrowedRows]: any = await db.execute(
       `SELECT 
         lb.id as borrow_id, 
@@ -22,7 +32,7 @@ export async function getLibraryData(studentId: number) {
       [studentId]
     );
 
-    // 2. Fetch the available library catalog
+    // 3. Fetch the available library catalog
     const [catalogRows]: any = await db.execute(
       `SELECT id, isbn, title, author, stockQuantity, location 
        FROM book 

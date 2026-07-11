@@ -21,7 +21,7 @@ export default function StudentLibraryPage() {
 
   useEffect(() => {
     async function fetchData() {
-      const res = await getLibraryData(290); // Hardcoded ID 290 for testing
+      const res = await getLibraryData();
       if (res.success) {
         setBorrowedBooks(res.borrowed || []);
         setCatalog(res.catalog || []);
@@ -92,7 +92,7 @@ export default function StudentLibraryPage() {
               
               return (
                 <div key={i} className={`p-6 rounded-2xl border bg-white shadow-sm flex flex-col sm:flex-row gap-6 ${timerInfo.isOverdue ? 'border-rose-300' : 'border-slate-200'}`}>
-                  <div className="flex-grow space-y-2">
+                  <div className="grow space-y-2">
                     <h3 className="font-black text-slate-800 text-lg leading-tight">{book.title}</h3>
                     <p className="text-sm font-semibold text-slate-500">{book.author}</p>
                     <p className="text-xs text-slate-400 font-mono mt-2">ISBN: {book.isbn}</p>

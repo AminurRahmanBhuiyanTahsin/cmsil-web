@@ -13,22 +13,24 @@ import {
   User,
   ChevronLeft,
   ChevronRight,
-  ClipboardCheck // Add this
+  ClipboardCheck,
+  LifeBuoy // Added this import for the Helpdesk
 } from "lucide-react";
 
 export default function StudentLayout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const studentLinks = [
-  { name: "Overview", href: "/student", icon: <LayoutDashboard size={20} /> },
-  { name: "Routine", href: "/student/routine", icon: <CalendarDays size={20} /> },
-  { name: "Labs", href: "/student/labs", icon: <Microscope size={20} /> },
-  { name: "Attendance", href: "/student/attendance", icon: <ClipboardCheck size={20} /> }, // New Link
-  { name: "Results", href: "/student/results", icon: <GraduationCap size={20} /> },
-  { name: "Fees", href: "/student/fees", icon: <Wallet size={20} /> },
-  { name: "Library", href: "/student/library", icon: <Library size={20} /> },
-  { name: "Profile", href: "/student/profile", icon: <User size={20} /> },
-];
+    { name: "Overview", href: "/student", icon: <LayoutDashboard size={20} /> },
+    { name: "Routine", href: "/student/routine", icon: <CalendarDays size={20} /> },
+    { name: "Labs", href: "/student/labs", icon: <Microscope size={20} /> },
+    { name: "Attendance", href: "/student/attendance", icon: <ClipboardCheck size={20} /> }, 
+    { name: "Results", href: "/student/results", icon: <GraduationCap size={20} /> },
+    { name: "Fees", href: "/student/fees", icon: <Wallet size={20} /> },
+    { name: "Library", href: "/student/library", icon: <Library size={20} /> },
+    { name: "Helpdesk", href: "/student/helpdesk", icon: <LifeBuoy size={20} /> }, // New Helpdesk Link
+    { name: "Profile", href: "/student/profile", icon: <User size={20} /> },
+  ];
 
   return (
     <div className="flex h-screen bg-slate-50 overflow-hidden">
